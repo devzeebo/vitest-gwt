@@ -1,0 +1,84 @@
+{
+  "name": "vitest-gwt",
+  "version": "2.0.0",
+  "description": "A small library to help Vitest support given-when-then style testing without a bunch of overhead",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "src",
+    "!**/*.spec.ts"
+  ],
+  "scripts": {
+    "build": "wireit",
+    "test": "wireit",
+    "lint": "wireit",
+    "test:coverage": "wireit",
+    "prepublishOnly": "wireit"
+  },
+  "wireit": {
+    "build": {
+      "command": "tsc --project ./tsconfig.build.json",
+      "files": [
+        "src/**/*.ts",
+        "tsconfig.*",
+        "!src/**/*.spec.ts"
+      ],
+      "output": [
+        "lib/**"
+      ]
+    },
+    "lint": {
+      "command": "eslint ./src ./examples"
+    },
+    "test": {
+      "command": "vitest"
+    },
+    "test:coverage": {
+      "command": "vitest --coverage"
+    },
+    "prepublishOnly": {
+      "dependencies": [
+        "lint",
+        "test:coverage",
+        "build"
+      ]
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devzeebo/vitest-gwt.git"
+  },
+  "peerDependencies": {
+    "vitest": ">2.0.0"
+  },
+  "keywords": [
+    "vitest",
+    "gwt",
+    "unit",
+    "testing",
+    "given",
+    "when",
+    "then"
+  ],
+  "author": "Eric Siebeneich",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/devzeebo/vitest-gwt/issues"
+  },
+  "homepage": "https://github.com/devzeebo/vitest-gwt#readme",
+  "devDependencies": {
+    "@react-ddd/eslint-config": "^0.3.1",
+    "@types/lodash": "^4.14.198",
+    "@types/node": "^20.6.0",
+    "@vitest/coverage-v8": "^2.0.5",
+    "axios": "^1.5.0",
+    "lodash": "^4.17.21",
+    "typescript": "^5.2.2",
+    "vitest": ">2.0.0",
+    "wireit": "^0.13.0"
+  },
+  "dependencies": {
+    "gwt-runner": "^2.4.0"
+  }
+}
