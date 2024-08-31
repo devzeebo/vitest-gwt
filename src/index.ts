@@ -1,10 +1,10 @@
 import {
-    test as vitest,
-    beforeEach as vitestBeforeEach,
-    afterEach as vitestAfterEach,
+  test as vitest,
+  beforeEach as vitestBeforeEach,
+  afterEach as vitestAfterEach,
 } from 'vitest';
-import withAspectBuilder from './withAspect';
 import gwtRunner, { TestContext } from 'gwt-runner';
+import withAspectBuilder from './withAspect';
 
 export default gwtRunner(vitest);
 export { TestContext };

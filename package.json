@@ -1,6 +1,6 @@
 {
   "name": "vitest-gwt",
-  "version": "2.0.0",
+  "version": "0.0.1",
   "description": "A small library to help Vitest support given-when-then style testing without a bunch of overhead",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -29,13 +29,13 @@
       ]
     },
     "lint": {
-      "command": "eslint ./src ./examples"
+      "command": "eslint ./src"
     },
     "test": {
-      "command": "vitest"
+      "command": "vitest run"
     },
     "test:coverage": {
-      "command": "vitest --coverage"
+      "command": "vitest run --coverage"
     },
     "prepublishOnly": {
       "dependencies": [

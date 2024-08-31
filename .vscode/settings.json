@@ -1,0 +1,11 @@
+{
+    "editor.formatOnSave": true,
+    "eslint.format.enable": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit"
+    },
+    "[javascript][typescript][javascriptreact][typescriptreact][astro]": {
+        "editor.tabSize": 2,
+    },
+    "prettier.enable": false
+}
