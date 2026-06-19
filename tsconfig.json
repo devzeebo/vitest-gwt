@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es5",
     "lib": [
       "ESNext"
     ],
+    "rootDir": "./src",
     "outDir": "./lib",
     "declaration": true,
     "sourceMap": true,
