@@ -1,0 +1,19 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "vitest-gwt",
+  "description": "Given-when-then style testing for Vitest without the overhead. A thin Vitest binding over gwt-runner.",
+  "branch": "main",
+  "folders": ["docs"],
+  "excludeFolders": ["src", "lib", "coverage", "node_modules", ".wireit"],
+  "excludeFiles": [],
+  "rules": [
+    "Import the test function from vitest-gwt, not vitest: `import test from 'vitest-gwt'`. vitest-gwt calls Vitest's test runner for you.",
+    "Use UNBOUND function declarations (never arrow functions) for given/when/then clauses. The runner binds each clause to a per-test Context, so arrow functions (which cannot be rebound) break it.",
+    "Share state between clauses only through `this` (the test Context). No arguments are passed to clauses.",
+    "Each clause key must map to a function. Key names are descriptive only and do not affect execution; use ES shorthand for readability.",
+    "Expect a thrown error by adding a `then` clause named `expect_error`. It receives the thrown error; otherwise an uncaught throw fails the test.",
+    "Chain multi-step flows with a `scenario` array of `{ when, then }` and `{ then_when, then }` blocks instead of a single `when`/`then`.",
+    "vitest-gwt major version tracks the Vitest major version: vitest@4.x → vitest-gwt@4.x."
+  ],
+  "previousVersions": []
+}

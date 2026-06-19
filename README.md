@@ -81,29 +81,6 @@ In these cases, you can use the scenario definition style which allows chaining
 }
 ```
 
-## Disabling a test
-Sometimes you want a test to be disabled in code. Vitest offers this functionality with
-the `xtest` method, and we've duplicated this logic, but with strong typing so you can
-disable your gwt style tests.
-
-```js
-import test, { xtest } from 'vitest-gwt';
-
-describe('test context', () => {
-  test('this test will run', {
-    then: {
-      CANARY,
-    },
-  });
-
-  xtest('this test will NOT run', {
-    when: {
-      oops_we_broke_this,
-    },
-  });
-});
-```
-
 ## withAspect
 
 `withAspect` wraps up vitest's `beforeEach` and `afterEach` to allow preparing and
@@ -128,5 +105,8 @@ the specific test.
 
 ## Detailed Usage
 
-Please refer to [gwt-runner](https://github.com/devzeebo/gwt-runner) for
-detailed usage on how to write tests and clauses.
+Full guides live in [`docs/`](./docs) — writing tests, expecting errors,
+scenarios, shared context (`withAspect`), and the API reference.
+
+For the underlying runner internals, refer to
+[gwt-runner](https://github.com/devzeebo/gwt-runner).
