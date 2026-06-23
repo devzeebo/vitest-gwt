@@ -6,7 +6,7 @@ need to assert, act again, then assert something else. For those, use the
 blocks chained together.
 
 ```js
-test('checkout flow', {
+test("checkout flow", {
   given: {
     an_empty_cart,
   },
@@ -51,21 +51,21 @@ When a step fails, the error is wrapped with the step index. Give each block a
 **`name`** to make failures readable:
 
 ```js
-test('checkout flow', {
+test("checkout flow", {
   given: { an_empty_cart },
   scenario: [
     {
-      name: 'Adding to cart',
+      name: "Adding to cart",
       when: { adding_an_item },
       then: { the_cart_has_one_item },
     },
     {
-      name: 'Checking out',
+      name: "Checking out",
       then_when: { submitting_the_order },
       then: { the_order_is_created },
     },
     {
-      name: 'Paying',
+      name: "Paying",
       then_when: { payment_fails },
       then: { expect_error: the_order_is_cancelled },
     },
@@ -82,7 +82,7 @@ test('checkout flow', {
 The old style encodes order in key prefixes (`when_*`, `then_*`):
 
 ```js
-test('checkout flow', {
+test("checkout flow", {
   given: { mock_vitest_test_function, GOOD_test_case },
   scenario: {
     when_executing_test_case,
@@ -97,7 +97,7 @@ test('checkout flow', {
 Scenario-level `expect_error` is also supported in the deprecated form:
 
 ```js
-test('checkout flow with error', {
+test("checkout flow with error", {
   given: { mock_vitest_test_function, GOOD_test_case },
   scenario: {
     when_executing_test_case,

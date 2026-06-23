@@ -18,10 +18,10 @@ npm install --save-dev vitest
 major version of Vitest you run:
 
 | Vitest | vitest-gwt |
-| --- | --- |
-| `4.x` | `4.x` |
-| `3.x` | `3.x` |
-| `2.x` | `2.x` |
+| ------ | ---------- |
+| `4.x`  | `4.x`      |
+| `3.x`  | `3.x`      |
+| `2.x`  | `2.x`      |
 
 ## Your first test
 
@@ -29,11 +29,11 @@ Import `test` from `vitest-gwt` (not `vitest`) and describe a test with
 `given`, `when`, and `then`:
 
 ```js
-import { describe } from 'vitest';
-import test from 'vitest-gwt';
+import { describe } from "vitest";
+import test from "vitest-gwt";
 
-describe('addition', () => {
-  test('adds two numbers', {
+describe("addition", () => {
+  test("adds two numbers", {
     given: {
       two_numbers,
     },

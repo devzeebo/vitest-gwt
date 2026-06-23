@@ -1,11 +1,11 @@
-import { TestContext } from 'gwt-runner';
-import { vi, describe, expect } from 'vitest';
+import { TestContext } from "gwt-runner";
+import { vi, describe, expect } from "vitest";
 
-import test from './index';
-import withAspectBuilder from './withAspect';
+import test from "./index";
+import withAspectBuilder from "./withAspect";
 
-describe('withAspect', () => {
-  test('creates context BEFORE the before each', {
+describe("withAspect", () => {
+  test("creates context BEFORE the before each", {
     given: {
       mock_vitest_functions,
       mock_context_provider,
@@ -19,7 +19,7 @@ describe('withAspect', () => {
     },
   });
 
-  test('releases context AFTER the after each', {
+  test("releases context AFTER the after each", {
     given: {
       mock_vitest_functions,
       mock_context_provider,
@@ -35,7 +35,7 @@ describe('withAspect', () => {
     },
   });
 
-  test('after each is optional', {
+  test("after each is optional", {
     given: {
       mock_vitest_functions,
       mock_context_provider,
@@ -51,18 +51,18 @@ describe('withAspect', () => {
 });
 
 type MockContext = Partial<{
-  context_value: string,
-  before_each: string | null,
+  context_value: string;
+  before_each: string | null;
 }>;
 
 type Context = Partial<{
-  mock_context: MockContext,
+  mock_context: MockContext;
   vitest: {
-    beforeEach: (...args: any[]) => any,
-    afterEach: (...args: any[]) => any,
-  },
-  before_each: (this: MockContext) => void,
-  after_each: (this: MockContext) => void,
+    beforeEach: (...args: any[]) => any;
+    afterEach: (...args: any[]) => any;
+  };
+  before_each: (this: MockContext) => void;
+  after_each: (this: MockContext) => void;
 }>;
 
 function mock_vitest_functions(this: Context) {
@@ -73,14 +73,14 @@ function mock_vitest_functions(this: Context) {
 }
 
 function mock_context_provider(this: Context) {
-  vi.spyOn(TestContext, 'releaseContext').mockImplementation(vi.fn());
-  vi.spyOn(TestContext, 'createContext').mockImplementation(() => {
+  vi.spyOn(TestContext, "releaseContext").mockImplementation(vi.fn());
+  vi.spyOn(TestContext, "createContext").mockImplementation(() => {
     this.mock_context = {
-      context_value: 'before',
+      context_value: "before",
     };
   });
 
-  Object.defineProperty(TestContext, 'context', {
+  Object.defineProperty(TestContext, "context", {
     configurable: true,
     get: () => this.mock_context,
   });
@@ -99,10 +99,7 @@ function after_each(this: Context) {
 }
 
 function using_aspect(this: Context) {
-  withAspectBuilder(
-    this.vitest!.beforeEach,
-    this.vitest!.afterEach,
-  )(
+  withAspectBuilder(this.vitest!.beforeEach, this.vitest!.afterEach)(
     this.before_each!,
     this.after_each!,
   );

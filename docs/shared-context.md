@@ -4,7 +4,7 @@
 up the test **Context** before and after every test.
 
 ```js
-import test, { withAspect } from 'vitest-gwt';
+import test, { withAspect } from "vitest-gwt";
 
 withAspect(
   // beforeEach — prep work. Bound to the Context.
@@ -32,17 +32,15 @@ withAspect(
 ## Example
 
 ```js
-import { describe } from 'vitest';
-import test, { withAspect } from 'vitest-gwt';
+import { describe } from "vitest";
+import test, { withAspect } from "vitest-gwt";
 
-describe('with a seeded database', () => {
-  withAspect(
-    function () {
-      this.users = [{ id: 1, name: 'Ada' }];
-    },
-  );
+describe("with a seeded database", () => {
+  withAspect(function () {
+    this.users = [{ id: 1, name: "Ada" }];
+  });
 
-  test('finds the seeded user', {
+  test("finds the seeded user", {
     when: { looking_up_user_by_id },
     then: { the_user_is_found },
   });
@@ -57,7 +55,7 @@ for advanced or testing scenarios (for example, mocking the provider when
 testing the library itself):
 
 ```js
-import test, { TestContext } from 'vitest-gwt';
+import test, { TestContext } from "vitest-gwt";
 
 TestContext.createContext();
 // ... interact with TestContext.context ...

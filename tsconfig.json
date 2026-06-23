@@ -4,7 +4,6 @@
       "ESNext"
     ],
     "rootDir": "./src",
-    "outDir": "./lib",
     "declaration": true,
     "sourceMap": true,
     "esModuleInterop": true,
@@ -12,9 +11,10 @@
     "experimentalDecorators": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "commonjs",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "target": "ES2022",
     "skipLibCheck": true,
-    "importHelpers": true,
     "typeRoots": [
       "./node_modules/@types"
     ]

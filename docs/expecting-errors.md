@@ -8,7 +8,7 @@ If code throws an error **and** there is no `expect_error` clause, the test
 fails with that error.
 
 ```js
-test('should throw error', {
+test("should throw error", {
   given: {
     an_error_message,
   },
@@ -21,7 +21,7 @@ test('should throw error', {
 });
 
 function an_error_message() {
-  this.error_message = 'an error';
+  this.error_message = "an error";
 }
 
 function throwing_error() {
@@ -39,7 +39,7 @@ The key must be `expect_error`, but the function itself can have any name.
 Using a more descriptive function name keeps assertions readable:
 
 ```js
-test('rejects invalid email', {
+test("rejects invalid email", {
   given: { invalid_email },
   when: { validating_email },
   then: {
@@ -48,7 +48,7 @@ test('rejects invalid email', {
 });
 
 function rejected_with_server_message(error) {
-  expect(error).toBe('error message from server');
+  expect(error).toBe("error message from server");
 }
 ```
 

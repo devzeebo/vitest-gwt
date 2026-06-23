@@ -5,11 +5,11 @@
 **given-when-then** style tests with strong typing and almost no ceremony.
 
 ```js
-import { describe } from 'vitest';
-import test from 'vitest-gwt';
+import { describe } from "vitest";
+import test from "vitest-gwt";
 
-describe('a widget', () => {
-  test('does the thing', {
+describe("a widget", () => {
+  test("does the thing", {
     given: { a_widget },
     when: { the_thing_is_done },
     then: { the_thing_happened },
@@ -19,14 +19,14 @@ describe('a widget', () => {
 
 ## Sections
 
-| Document | Covers |
-| --- | --- |
-| [Getting Started](./getting-started.md) | Install, version compatibility, your first test |
-| [Writing Tests](./writing-tests.md) | The `given`/`when`/`then` definition, the Context (`this`), arrow-function rule, async, curried steps |
-| [Expecting Errors](./expecting-errors.md) | The `expect_error` clause |
-| [Scenarios](./scenarios.md) | Multi-step `scenario` flows with `when`/`then`/`then_when` |
-| [Shared Context](./shared-context.md) | `withAspect` for `beforeEach`/`afterEach` setup and teardown |
-| [API Reference](./api-reference.md) | Exports and signatures: `test`, `withAspect`, `TestContext` |
+| Document                                  | Covers                                                                                                |
+| ----------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| [Getting Started](./getting-started.md)   | Install, version compatibility, your first test                                                       |
+| [Writing Tests](./writing-tests.md)       | The `given`/`when`/`then` definition, the Context (`this`), arrow-function rule, async, curried steps |
+| [Expecting Errors](./expecting-errors.md) | The `expect_error` clause                                                                             |
+| [Scenarios](./scenarios.md)               | Multi-step `scenario` flows with `when`/`then`/`then_when`                                            |
+| [Shared Context](./shared-context.md)     | `withAspect` for `beforeEach`/`afterEach` setup and teardown                                          |
+| [API Reference](./api-reference.md)       | Exports and signatures: `test`, `withAspect`, `TestContext`                                           |
 
 ## Why GWT?
 

@@ -1,0 +1,37 @@
+export default {
+  pack: {
+    entry: "src/index.ts",
+    format: ["esm", "cjs"],
+    dts: {
+      oxc: true,
+    },
+    sourcemap: true,
+    outDir: "lib",
+    exports: false,
+    platform: "node",
+    root: "src",
+  },
+  lint: {
+    ignorePatterns: ["lib/**", "coverage/**"],
+    options: {
+      typeAware: true,
+      typeCheck: true,
+    },
+    overrides: [
+      {
+        files: ["**/*.spec.ts"],
+        rules: {
+          "unicorn/no-thenable": "off",
+        },
+      },
+    ],
+  },
+  test: {
+    include: ["src/**/*.spec.ts"],
+    coverage: {
+      provider: "v8",
+      include: ["src/**/*.ts"],
+      exclude: ["src/**/*.spec.ts"],
+    },
+  },
+};

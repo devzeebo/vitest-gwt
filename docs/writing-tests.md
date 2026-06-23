@@ -10,7 +10,7 @@ key (except `scenario`, see [Scenarios](./scenarios.md)) makes the test fail
 with an error.
 
 ```js
-test('has no expected errors', {
+test("has no expected errors", {
   given: {
     mock_vitest_test_function,
     GOOD_test_case,
@@ -34,7 +34,7 @@ clauses **only** through `this`. No arguments are passed to clauses.
 
 ```js
 function valid_email() {
-  this.email = 'test@mail.com';
+  this.email = "test@mail.com";
 }
 
 async function validating_email() {
@@ -54,17 +54,17 @@ Clauses may be regular or `async` functions. Use `this` to hand data from
 > [!IMPORTANT]
 > Only unbound function declarations work as clauses. **Never use arrow
 > functions** — they cannot be rebound, so the Context binding breaks and
-`this` is wrong.
+> `this` is wrong.
 
 ```js
 // GOOD — function declaration
 function valid_email() {
-  this.email = 'test@mail.com';
+  this.email = "test@mail.com";
 }
 
 // BAD — arrow function, Context binding fails
 const valid_email = () => {
-  this.email = 'test@mail.com';
+  this.email = "test@mail.com";
 };
 ```
 
@@ -95,19 +95,10 @@ Instead of a keyed object, each phase may be an **array** of functions. Useful
 with curried factories (below) or when order is what matters:
 
 ```js
-test('uses array steps', {
-  given: [
-    mock_vitest_test_function,
-    GOOD_test_case,
-  ],
-  when: [
-    executing_test_case,
-  ],
-  then: [
-    all_GIVENS_called,
-    all_WHENS_called,
-    all_THENS_called,
-  ],
+test("uses array steps", {
+  given: [mock_vitest_test_function, GOOD_test_case],
+  when: [executing_test_case],
+  then: [all_GIVENS_called, all_WHENS_called, all_THENS_called],
 });
 ```
 
@@ -117,13 +108,11 @@ A factory can close over arguments and return a clause. Mix keyed and array
 forms freely:
 
 ```js
-test('curried step', {
+test("curried step", {
   given: {
     some_given,
   },
-  when: [
-    user_enters_data({ some: 'data' }),
-  ],
+  when: [user_enters_data({ some: "data" })],
   then: {
     the_form_has_data,
   },
@@ -155,31 +144,30 @@ A contrived `validateEmailAddress` API call, tested with `vi.mock`:
 
 ```js
 // validateEmailAddress.js
-import axios from 'axios';
+import axios from "axios";
 
-export default (email) => axios
-  .post('/api/validateEmail', { email })
-  .then((res) => (res.data.success
-    ? Promise.resolve(true)
-    : Promise.reject(res.data.error)));
+export default (email) =>
+  axios
+    .post("/api/validateEmail", { email })
+    .then((res) => (res.data.success ? Promise.resolve(true) : Promise.reject(res.data.error)));
 ```
 
 ```js
 // validateEmailAddress.spec.js
-import { describe, expect, vi } from 'vitest';
-import axios from 'axios';
-import test from 'vitest-gwt';
+import { describe, expect, vi } from "vitest";
+import axios from "axios";
+import test from "vitest-gwt";
 
-import validateEmailAddress from './validateEmailAddress';
+import validateEmailAddress from "./validateEmailAddress";
 
-vi.mock('axios');
+vi.mock("axios");
 
-describe('the validate email address api', () => {
+describe("the validate email address api", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  test('returns true for valid email addresses', {
+  test("returns true for valid email addresses", {
     given: {
       valid_email_address,
     },
@@ -191,7 +179,7 @@ describe('the validate email address api', () => {
     },
   });
 
-  test('extracts error for invalid email address', {
+  test("extracts error for invalid email address", {
     given: {
       INVALID_email_address,
     },
@@ -205,14 +193,14 @@ describe('the validate email address api', () => {
 });
 
 function valid_email_address() {
-  this.mock_email = 'valid@email.com';
+  this.mock_email = "valid@email.com";
   axios.post.mockResolvedValue({ data: { success: true } });
 }
 
 function INVALID_email_address() {
-  this.mock_email = 'invalid';
+  this.mock_email = "invalid";
   axios.post.mockResolvedValue({
-    data: { success: false, error: 'error message from server' },
+    data: { success: false, error: "error message from server" },
   });
 }
 
@@ -225,7 +213,7 @@ function email_address_is_valid() {
 }
 
 function email_address_is_INVALID(error) {
-  expect(error).toBe('error message from server');
+  expect(error).toBe("error message from server");
 }
 ```
 

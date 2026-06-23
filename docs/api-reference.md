@@ -4,7 +4,7 @@
 It calls Vitest's `test`, `beforeEach`, and `afterEach` for you.
 
 ```js
-import test, { withAspect, TestContext } from 'vitest-gwt';
+import test, { withAspect, TestContext } from "vitest-gwt";
 ```
 
 ## `test` (default export)
@@ -12,10 +12,7 @@ import test, { withAspect, TestContext } from 'vitest-gwt';
 The GWT test function, bound to Vitest's runner.
 
 ```ts
-function test<TContext>(
-  name: string,
-  definition: GwtDefinition<TContext>,
-): void;
+function test<TContext>(name: string, definition: GwtDefinition<TContext>): void;
 ```
 
 - **`name`** — test name passed to Vitest.
@@ -32,10 +29,7 @@ Registers `beforeEach`/`afterEach` hooks that prepare and tear down the test
 Context.
 
 ```ts
-function withAspect<T>(
-  before: (this: T) => unknown,
-  after?: (this: T) => unknown,
-): void;
+function withAspect<T>(before: (this: T) => unknown, after?: (this: T) => unknown): void;
 ```
 
 - **`before`** — runs before each test, bound to the Context.
@@ -62,7 +56,7 @@ TestContext.context: object;        // the active Context
 `definition` rather than importing these directly:
 
 ```ts
-import test from 'vitest-gwt';
+import test from "vitest-gwt";
 
 type Context = {
   email: string;
@@ -70,7 +64,7 @@ type Context = {
 };
 
 function valid_email(this: Context) {
-  this.email = 'valid@email.com';
+  this.email = "valid@email.com";
 }
 ```
 

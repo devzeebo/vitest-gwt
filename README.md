@@ -1,4 +1,5 @@
 # vitest-gwt
+
 A small library to help Vitest support given-when-then style testing without a
 bunch of overhead
 
@@ -10,32 +11,32 @@ vitest@2.x.x, use vitest-gwt@2.x.x
 ## Usage
 
 1. Install the package
-    ```bash
-    npm i --save-dev vitest-gwt
-    ```
+   ```bash
+   npm i --save-dev vitest-gwt
+   ```
 2. In your test files, import `test`
-    ```js
-    import test from 'vitest-gwt';
-    ```
+   ```js
+   import test from "vitest-gwt";
+   ```
 3. Write a test!
-    ```js
-    describe('test context', () => {
-      test('has no expected errors', {
-        given: {
-          mock_vitest_test_function,
-          GOOD_test_case,
-        },
-        when: {
-          executing_test_case,
-        },
-        then: {
-          all_GIVENS_called,
-          all_WHENS_called,
-          all_THENS_called,
-        },
-      });
-    });
-    ```
+   ```js
+   describe("test context", () => {
+     test("has no expected errors", {
+       given: {
+         mock_vitest_test_function,
+         GOOD_test_case,
+       },
+       when: {
+         executing_test_case,
+       },
+       then: {
+         all_GIVENS_called,
+         all_WHENS_called,
+         all_THENS_called,
+       },
+     });
+   });
+   ```
 
 ## [Scenario Test](https://github.com/devzeebo/gwt-runner/blob/main/README.md#scenario-definition)
 
@@ -101,7 +102,6 @@ withAspect(
 The `afterEach` has access to whatever values you put on the Context in the
 `beforeEach`. It does NOT have access to the values put on the Context during
 the specific test.
-
 
 ## Detailed Usage
 
