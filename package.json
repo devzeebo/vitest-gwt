@@ -66,7 +66,7 @@
   "peerDependencies": {
     "vitest": ">=4.0.0"
   },
-  "packageManager": "npm@11.17.0",
+  "packageManager": "npm@11.12.1",
   "wireit": {
     "build": {
       "command": "vp pack",
@@ -108,7 +108,7 @@
     "prepublishOnly": {
       "dependencies": [
         "lint",
-        "test:coverage",
+        "test",
         "build"
       ]
     }
