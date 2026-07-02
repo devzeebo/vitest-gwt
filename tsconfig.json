@@ -1,8 +1,6 @@
 {
   "compilerOptions": {
-    "lib": [
-      "ESNext"
-    ],
+    "lib": ["ESNext"],
     "rootDir": "./src",
     "declaration": true,
     "sourceMap": true,
@@ -15,11 +13,7 @@
     "moduleResolution": "bundler",
     "target": "ES2022",
     "skipLibCheck": true,
-    "typeRoots": [
-      "./node_modules/@types"
-    ]
+    "typeRoots": ["./node_modules/@types"]
   },
-  "include": [
-    "./src"
-  ]
+  "include": ["./src"]
 }

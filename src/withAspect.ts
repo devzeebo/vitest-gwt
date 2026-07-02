@@ -8,7 +8,8 @@ export type WithAspectBuilder = (
   afterEach: typeof vitestAfterEach,
 ) => <T>(before: Callback<T>, after?: Callback<T>) => void;
 
-const withAspectBuilder: WithAspectBuilder = (beforeEach, afterEach) =>
+const withAspectBuilder: WithAspectBuilder =
+  (beforeEach, afterEach) =>
   <T>(before: Callback<T>, after?: Callback<T>): void => {
     beforeEach(async () => {
       TestContext.createContext();
