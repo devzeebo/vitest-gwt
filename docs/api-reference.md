@@ -29,12 +29,34 @@ Registers `beforeEach`/`afterEach` hooks that prepare and tear down the test
 Context.
 
 ```ts
-function withAspect<T>(before: (this: T) => unknown, after?: (this: T) => unknown): void;
+function withAspect<T>(before: AspectFunction<T>, after?: (this: T) => unknown): void;
 ```
 
-- **`before`** — runs before each test, bound to the Context.
+- **`before`** — runs before each test, bound to the Context. May set an
+  optional `timeout` (ms) that is forwarded to Vitest's `beforeEach`.
 - **`after`** — optional; runs after each test, bound to the same Context,
   then releases the Context.
+
+### `AspectFunction`
+
+```ts
+type AspectFunction<T = unknown> = {
+  (this: T): unknown;
+  timeout?: number;
+};
+```
+
+Use this type when you need a longer hook timeout:
+
+```ts
+import { withAspect, type AspectFunction } from "vitest-gwt";
+
+const setup: AspectFunction<Context> = function () {
+  // slow prep
+};
+setup.timeout = 100_000;
+withAspect(setup);
+```
 
 See [Shared Context](./shared-context.md).
 

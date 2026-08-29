@@ -103,6 +103,19 @@ The `afterEach` has access to whatever values you put on the Context in the
 `beforeEach`. It does NOT have access to the values put on the Context during
 the specific test.
 
+To raise the Vitest hook timeout for slow setup, type the before callback as
+`AspectFunction` and set `timeout` (ms):
+
+```ts
+import { withAspect, type AspectFunction } from "vitest-gwt";
+
+const setup: AspectFunction<Context> = function () {
+  // slow prep
+};
+setup.timeout = 100_000;
+withAspect(setup);
+```
+
 ## Detailed Usage
 
 Full guides live in [`docs/`](./docs) — writing tests, expecting errors,
