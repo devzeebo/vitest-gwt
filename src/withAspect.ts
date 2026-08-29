@@ -1,7 +1,8 @@
-import type { beforeEach as vitestBeforeEach, afterEach as vitestAfterEach } from "vitest";
+import type {
+  beforeEach as vitestBeforeEach,
+  afterEach as vitestAfterEach,
+} from "vitest";
 import { TestContext } from "gwt-runner";
-
-type AfterCallback<T> = (this: T) => unknown;
 
 export type AspectFunction<T = unknown> = {
   (this: T): unknown;
@@ -11,11 +12,11 @@ export type AspectFunction<T = unknown> = {
 export type WithAspectBuilder = (
   beforeEach: typeof vitestBeforeEach,
   afterEach: typeof vitestAfterEach,
-) => <T>(before: AspectFunction<T>, after?: AfterCallback<T>) => void;
+) => <T>(before: AspectFunction<T>, after?: AspectFunction<T>) => void;
 
 const withAspectBuilder: WithAspectBuilder =
   (beforeEach, afterEach) =>
-  <T>(before: AspectFunction<T>, after?: AfterCallback<T>): void => {
+  <T>(before: AspectFunction<T>, after?: AspectFunction<T>): void => {
     beforeEach(async () => {
       TestContext.createContext();
 
@@ -28,7 +29,7 @@ const withAspectBuilder: WithAspectBuilder =
       }
 
       TestContext.releaseContext();
-    });
+    }, after?.timeout);
   };
 
 export default withAspectBuilder;

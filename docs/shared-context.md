@@ -47,6 +47,42 @@ withAspect(setup);
 
 That value is passed through to Vitest's `beforeEach` as its timeout argument.
 
+## Per-suite Vitest options with `withTestOptions`
+
+Vitest applies test options (such as `timeout`, `retry`, and `repeats`) when a
+test is **registered**, not when it runs. `withAspect` is too late for that.
+Use `withTestOptions` inside a `describe` to set options immediately for every
+GWT `test` registered in that suite:
+
+```ts
+import { describe } from "vitest";
+import test, { withTestOptions, type TestContext } from "vitest-gwt";
+
+type Context = TestContext<"vitest"> & {
+  // other fields...
+};
+
+describe("slow integration", () => {
+  withTestOptions(function (this: Context) {
+    this.testOptions.timeout = 100_000;
+  });
+
+  test("takes a while", {
+    when: { slow_operation },
+    then: { it_finished },
+  });
+});
+```
+
+- The configure callback runs **synchronously at collection time**. Only set
+  `testOptions` here — do not open databases or other runtime resources.
+- Options are scoped to the current `describe` via the Vitest suite (and
+  inherited by nested describes unless overridden). Sibling suites outside that
+  block are unaffected.
+
+Use `AspectFunction.timeout` for **hook** timeouts; use `withTestOptions` for
+**test** timeouts and other Vitest `TestOptions`.
+
 ## Example
 
 ```js
@@ -80,7 +116,18 @@ TestContext.createContext();
 TestContext.releaseContext();
 ```
 
-You rarely need `TestContext` directly in application tests — `withAspect` and
-the `this` binding cover normal setup.
+You rarely need the `TestContext` **value** directly in application tests —
+`withAspect` and the `this` binding cover normal setup.
+
+As a **type**, `TestContext<"vitest">` types the `withTestOptions` configure
+callback:
+
+```ts
+import type { TestContext } from "vitest-gwt";
+
+type Context = TestContext<"vitest"> & {
+  db: Database;
+};
+```
 
 Next: [API Reference](./api-reference.md).
