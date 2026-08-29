@@ -4,7 +4,7 @@
 It calls Vitest's `test`, `beforeEach`, and `afterEach` for you.
 
 ```js
-import test, { withAspect, TestContext } from "vitest-gwt";
+import test, { withAspect, withTestOptions, TestContext } from "vitest-gwt";
 ```
 
 ## `test` (default export)
@@ -23,13 +23,16 @@ Clauses are unbound function declarations bound to a per-test Context
 (accessed via `this`). Arrow functions are not supported. See
 [Writing Tests](./writing-tests.md).
 
+When the current suite has options from `withTestOptions`, they are forwarded
+to Vitest as `test(name, options, fn)`.
+
 ## `withAspect`
 
 Registers `beforeEach`/`afterEach` hooks that prepare and tear down the test
 Context.
 
 ```ts
-function withAspect<T>(before: AspectFunction<T>, after?: (this: T) => unknown): void;
+function withAspect<T>(before: AspectFunction<T>, after?: AspectFunction<T>): void;
 ```
 
 - **`before`** — runs before each test, bound to the Context. May set an
@@ -59,6 +62,32 @@ withAspect(setup);
 ```
 
 See [Shared Context](./shared-context.md).
+
+## `withTestOptions`
+
+Sets Vitest `TestOptions` for every GWT test registered in the current
+`describe`. Runs immediately at collection time (not in `beforeEach`).
+
+```ts
+function withTestOptions(configure: (curr: TestOptions) => any): void;
+```
+
+```ts
+import test, { withTestOptions } from "vitest-gwt";
+
+describe("slow", () => {
+  withTestOptions((curr) => curr.timeout = 100_000);
+
+  test("takes a while", { when: { slow_op }, then: { done } });
+});
+```
+
+- `curr` is a shallow copy of inherited suite options — mutate it to configure
+  this suite.
+- Nested describes inherit parent options and may override individual fields.
+
+Use `withTestOptions` for test-level Vitest options. Use `AspectFunction.timeout`
+for hook timeouts. See [Shared Context](./shared-context.md).
 
 ## `TestContext`
 

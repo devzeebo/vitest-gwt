@@ -25,8 +25,8 @@ describe("a widget", () => {
 | [Writing Tests](./writing-tests.md)       | The `given`/`when`/`then` definition, the Context (`this`), arrow-function rule, async, curried steps |
 | [Expecting Errors](./expecting-errors.md) | The `expect_error` clause                                                                             |
 | [Scenarios](./scenarios.md)               | Multi-step `scenario` flows with `when`/`then`/`then_when`                                            |
-| [Shared Context](./shared-context.md)     | `withAspect` for `beforeEach`/`afterEach` setup and teardown                                          |
-| [API Reference](./api-reference.md)       | Exports and signatures: `test`, `withAspect`, `TestContext`                                           |
+| [Shared Context](./shared-context.md)     | `withAspect` / `withTestOptions` for setup, teardown, and per-suite Vitest options |
+| [API Reference](./api-reference.md)       | Exports and signatures: `test`, `withAspect`, `withTestOptions`, `TestContext`     |
 
 ## Why GWT?
 

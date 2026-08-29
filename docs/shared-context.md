@@ -47,6 +47,38 @@ withAspect(setup);
 
 That value is passed through to Vitest's `beforeEach` as its timeout argument.
 
+## Per-suite Vitest options with `withTestOptions`
+
+Vitest applies test options (such as `timeout`, `retry`, and `repeats`) when a
+test is **registered**, not when it runs. `withAspect` is too late for that.
+Use `withTestOptions` inside a `describe` to set options immediately for every
+GWT `test` registered in that suite:
+
+```ts
+import { describe } from "vitest";
+import test, { withTestOptions } from "vitest-gwt";
+
+describe("slow integration", () => {
+  withTestOptions((curr) => curr.timeout = 100_000);
+
+  test("takes a while", {
+    when: { slow_operation },
+    then: { it_finished },
+  });
+});
+```
+
+- The configure callback receives a shallow copy of the current suite's options
+  (including any inherited from a parent `describe`). Mutate that object to set
+  the options for this suite.
+- It runs **synchronously at collection time** — only touch options here.
+- Options are scoped to the current `describe` via the Vitest suite (and
+  inherited by nested describes unless overridden). Sibling suites outside that
+  block are unaffected.
+
+Use `AspectFunction.timeout` for **hook** timeouts; use `withTestOptions` for
+**test** timeouts and other Vitest `TestOptions`.
+
 ## Example
 
 ```js

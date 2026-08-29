@@ -116,10 +116,40 @@ setup.timeout = 100_000;
 withAspect(setup);
 ```
 
+## withTestOptions
+
+Vitest applies per-test options (like `timeout` and `retry`) when the test is
+**registered**, not when it runs — so `withAspect` is too late. Use
+`withTestOptions` inside a `describe` to set Vitest `TestOptions` for every GWT
+`test` in that suite:
+
+```ts
+import { describe } from "vitest";
+import test, { withTestOptions } from "vitest-gwt";
+
+describe("slow integration", () => {
+  withTestOptions((curr) => curr.timeout = 100_000);
+
+  test("takes a while", {
+    when: { slow_operation },
+    then: { it_finished },
+  });
+});
+```
+
+The callback receives a shallow copy of the current suite's options (including
+any inherited from a parent `describe`). Mutate that object to configure this
+suite. Nested describes inherit parent options and can override individual
+fields; sibling describes outside the block are unaffected.
+
+Use `AspectFunction.timeout` for **hook** timeouts; use `withTestOptions` for
+**test** timeouts and other Vitest options.
+
 ## Detailed Usage
 
 Full guides live in [`docs/`](./docs) — writing tests, expecting errors,
-scenarios, shared context (`withAspect`), and the API reference.
+scenarios, shared context (`withAspect` / `withTestOptions`), and the API
+reference.
 
 For the underlying runner internals, refer to
 [gwt-runner](https://github.com/devzeebo/gwt-runner).
