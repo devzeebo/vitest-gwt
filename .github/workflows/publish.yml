@@ -153,17 +153,23 @@ jobs:
           PACKAGE_DIR: ${{ steps.pack.outputs.package_dir }}
         run: |
           set -euo pipefail
-          # Capture stdout+stderr so OIDC/registry errors are visible in the log.
-          # set -e would otherwise discard $(...) output on failure.
+          # Keep stderr (WARN/OIDC logs) out of --json stdout so jq can parse.
+          err="$(mktemp)"
           set +e
-          output="$(pnpm stage publish "${PACKAGE_DIR}" --access public --tag latest --json 2>&1)"
+          output="$(pnpm stage publish "${PACKAGE_DIR}" --access public --tag latest --json 2>"${err}")"
           status=$?
           set -e
+          cat "${err}" >&2 || true
+          rm -f "${err}"
           printf '%s\n' "${output}"
           if [[ "${status}" -ne 0 ]]; then
             exit "${status}"
           fi
-          if printf '%s\n' "${output}" | jq -e '.error' >/dev/null 2>&1; then
+          if ! printf '%s\n' "${output}" | jq -e 'type == "object"' >/dev/null; then
+            echo "Stage publish did not return JSON" >&2
+            exit 1
+          fi
+          if printf '%s\n' "${output}" | jq -e '.error' >/dev/null; then
             echo "Stage publish returned an error payload" >&2
             exit 1
           fi
