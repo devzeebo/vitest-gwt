@@ -133,24 +133,30 @@ jobs:
           NEXT: ${{ steps.version.outputs.next }}
         run: |
           set -euo pipefail
+          # Work outside the git checkout — pnpm stage publish refuses unclean trees
+          workdir="${RUNNER_TEMP}/vitest-gwt-stage"
+          mkdir -p "${workdir}"
+          cd "${workdir}"
           # Avoid empty _authToken from setup-node's .npmrc when fetching a public package
           npm pack "vitest-gwt@${PR_TAG}" --userconfig /dev/null --registry https://registry.npmjs.org
           tarball="$(ls -1 vitest-gwt-*.tgz | head -n1)"
-          echo "tarball=${tarball}" >> "$GITHUB_OUTPUT"
           mkdir -p staged
           tar -xzf "${tarball}" -C staged
           jq --arg v "${NEXT}" '.version = $v' staged/package/package.json > staged/package/package.json.tmp
           mv staged/package/package.json.tmp staged/package/package.json
-          echo "Rewrote staged package version to ${NEXT}"
+          echo "package_dir=${workdir}/staged/package" >> "$GITHUB_OUTPUT"
+          echo "Rewrote staged package version to ${NEXT} at ${workdir}/staged/package"
 
       - name: Stage release
         id: stage
+        env:
+          PACKAGE_DIR: ${{ steps.pack.outputs.package_dir }}
         run: |
           set -euo pipefail
           # Capture stdout+stderr so OIDC/registry errors are visible in the log.
           # set -e would otherwise discard $(...) output on failure.
           set +e
-          output="$(pnpm stage publish ./staged/package --access public --tag latest --json 2>&1)"
+          output="$(pnpm stage publish "${PACKAGE_DIR}" --access public --tag latest --json 2>&1)"
           status=$?
           set -e
           printf '%s\n' "${output}"
