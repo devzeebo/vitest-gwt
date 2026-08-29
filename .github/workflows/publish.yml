@@ -147,9 +147,21 @@ jobs:
         id: stage
         run: |
           set -euo pipefail
-          output="$(pnpm stage publish ./staged/package --access public --tag latest --json)"
-          echo "${output}"
-          stage_id="$(printf '%s\n' "${output}" | jq -r 'to_entries[0].value.id // empty')"
+          # Capture stdout+stderr so OIDC/registry errors are visible in the log.
+          # set -e would otherwise discard $(...) output on failure.
+          set +e
+          output="$(pnpm stage publish ./staged/package --access public --tag latest --json 2>&1)"
+          status=$?
+          set -e
+          printf '%s\n' "${output}"
+          if [[ "${status}" -ne 0 ]]; then
+            exit "${status}"
+          fi
+          if printf '%s\n' "${output}" | jq -e '.error' >/dev/null 2>&1; then
+            echo "Stage publish returned an error payload" >&2
+            exit 1
+          fi
+          stage_id="$(printf '%s\n' "${output}" | jq -r 'to_entries[0].value.stageId // empty')"
           echo "stage_id=${stage_id}" >> "$GITHUB_OUTPUT"
           {
             echo "## Staged release"

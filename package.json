@@ -1,6 +1,6 @@
 {
   "name": "vitest-gwt",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "description": "A small library to help Vitest support given-when-then style testing without a bunch of overhead",
   "keywords": [
     "given",
