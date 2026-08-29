@@ -7,12 +7,8 @@ import type {
 
 const suiteOptions = new WeakMap<object, TestOptions>();
 
-export type TestOptionsContext = {
-  testOptions: TestOptions;
-};
-
-export type WithTestOptions = <T extends TestOptionsContext>(
-  configure: (this: T) => void,
+export type WithTestOptions = (
+  configure: (curr: TestOptions) => any,
 ) => void;
 
 export type GetCurrentSuite = typeof TestRunner.getCurrentSuite;
@@ -55,7 +51,7 @@ export const resolveTestOptions = (
 
 const withTestOptionsBuilder: WithTestOptionsBuilder =
   (getSuite) =>
-  <T extends TestOptionsContext>(configure: (this: T) => void): void => {
+  (configure): void => {
     const collector = getSuite();
     const suiteTask = getSuiteTask(collector);
     const parentOptions = suiteTask?.suite
@@ -63,7 +59,7 @@ const withTestOptionsBuilder: WithTestOptionsBuilder =
       : undefined;
     const testOptions: TestOptions = { ...parentOptions };
 
-    configure.call({ testOptions } as T);
+    configure(testOptions);
 
     if (suiteTask) {
       suiteOptions.set(suiteTask, testOptions);

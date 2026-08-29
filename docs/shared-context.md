@@ -56,16 +56,10 @@ GWT `test` registered in that suite:
 
 ```ts
 import { describe } from "vitest";
-import test, { withTestOptions, type TestContext } from "vitest-gwt";
-
-type Context = TestContext<"vitest"> & {
-  // other fields...
-};
+import test, { withTestOptions } from "vitest-gwt";
 
 describe("slow integration", () => {
-  withTestOptions(function (this: Context) {
-    this.testOptions.timeout = 100_000;
-  });
+  withTestOptions((curr) => curr.timeout = 100_000);
 
   test("takes a while", {
     when: { slow_operation },
@@ -74,8 +68,10 @@ describe("slow integration", () => {
 });
 ```
 
-- The configure callback runs **synchronously at collection time**. Only set
-  `testOptions` here — do not open databases or other runtime resources.
+- The configure callback receives a shallow copy of the current suite's options
+  (including any inherited from a parent `describe`). Mutate that object to set
+  the options for this suite.
+- It runs **synchronously at collection time** — only touch options here.
 - Options are scoped to the current `describe` via the Vitest suite (and
   inherited by nested describes unless overridden). Sibling suites outside that
   block are unaffected.
@@ -116,18 +112,7 @@ TestContext.createContext();
 TestContext.releaseContext();
 ```
 
-You rarely need the `TestContext` **value** directly in application tests —
-`withAspect` and the `this` binding cover normal setup.
-
-As a **type**, `TestContext<"vitest">` types the `withTestOptions` configure
-callback:
-
-```ts
-import type { TestContext } from "vitest-gwt";
-
-type Context = TestContext<"vitest"> & {
-  db: Database;
-};
-```
+You rarely need `TestContext` directly in application tests — `withAspect` and
+the `this` binding cover normal setup.
 
 Next: [API Reference](./api-reference.md).

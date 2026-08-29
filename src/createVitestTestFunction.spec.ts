@@ -1,10 +1,8 @@
 import { vi, describe, expect, type Mock } from "vitest";
-import type { RunnerTestSuite, SuiteCollector } from "vitest";
+import type { RunnerTestSuite, SuiteCollector, TestOptions } from "vitest";
 
 import test from "./index";
-import withTestOptionsBuilder, {
-  type TestOptionsContext,
-} from "./withTestOptions";
+import withTestOptionsBuilder from "./withTestOptions";
 import createVitestTestFunction from "./createVitestTestFunction";
 
 describe("createVitestTestFunction", () => {
@@ -39,7 +37,7 @@ type Context = Partial<{
   parent_suite: RunnerTestSuite;
   parent_collector: SuiteCollector;
   get_suite: Mock<() => SuiteCollector>;
-  configure: (this: TestOptionsContext) => void;
+  configure: (curr: TestOptions) => any;
   vitest_test: Mock<(...args: any[]) => any>;
   registered_callback: () => void;
 }>;
@@ -79,9 +77,7 @@ function mock_suite_collector(this: Context) {
 }
 
 function configure_timeout(this: Context) {
-  this.configure = function (this: TestOptionsContext) {
-    this.testOptions.timeout = 100_000;
-  };
+  this.configure = (curr) => curr.timeout = 100_000;
 }
 
 function using_test_options(this: Context) {

@@ -69,26 +69,21 @@ Sets Vitest `TestOptions` for every GWT test registered in the current
 `describe`. Runs immediately at collection time (not in `beforeEach`).
 
 ```ts
-function withTestOptions<T extends { testOptions: TestOptions }>(
-  configure: (this: T) => void,
-): void;
+function withTestOptions(configure: (curr: TestOptions) => any): void;
 ```
 
 ```ts
-import test, { withTestOptions, type TestContext } from "vitest-gwt";
-
-type Context = TestContext<"vitest">;
+import test, { withTestOptions } from "vitest-gwt";
 
 describe("slow", () => {
-  withTestOptions(function (this: Context) {
-    this.testOptions.timeout = 100_000;
-  });
+  withTestOptions((curr) => curr.timeout = 100_000);
 
   test("takes a while", { when: { slow_op }, then: { done } });
 });
 ```
 
-- Configure **synchronously**; only assign `testOptions` fields.
+- `curr` is a shallow copy of inherited suite options — mutate it to configure
+  this suite.
 - Nested describes inherit parent options and may override individual fields.
 
 Use `withTestOptions` for test-level Vitest options. Use `AspectFunction.timeout`
@@ -96,25 +91,14 @@ for hook timeouts. See [Shared Context](./shared-context.md).
 
 ## `TestContext`
 
-### Value (from `gwt-runner`)
-
-Manages the per-test Context. Rarely needed in application tests.
+Re-exported from `gwt-runner`. Manages the per-test Context. Rarely needed in
+application tests.
 
 ```ts
 TestContext.createContext(): void; // create a new Context
 TestContext.releaseContext(): void; // release the current Context
 TestContext.context: object;        // the active Context
 ```
-
-### Type
-
-```ts
-type TestContext<"vitest"> = {
-  testOptions: TestOptions;
-};
-```
-
-Compose with your own fields: `type Context = TestContext<"vitest"> & { ... }`.
 
 ## Type-only exports
 

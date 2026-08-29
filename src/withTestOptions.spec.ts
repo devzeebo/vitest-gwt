@@ -1,11 +1,8 @@
 import { vi, describe, expect, type Mock } from "vitest";
-import type { RunnerTestSuite, SuiteCollector } from "vitest";
+import type { RunnerTestSuite, SuiteCollector, TestOptions } from "vitest";
 
 import test from "./index";
-import withTestOptionsBuilder, {
-  resolveTestOptions,
-  type TestOptionsContext,
-} from "./withTestOptions";
+import withTestOptionsBuilder, { resolveTestOptions } from "./withTestOptions";
 
 describe("withTestOptions", () => {
   test("stores options on the suite", {
@@ -49,9 +46,9 @@ type SuiteFixtures = {
 type Context = Partial<
   SuiteFixtures & {
     get_suite: Mock<() => SuiteCollector>;
-    configure: (this: TestOptionsContext) => void;
-    parent_configure: (this: TestOptionsContext) => void;
-    child_configure: (this: TestOptionsContext) => void;
+    configure: (curr: TestOptions) => any;
+    parent_configure: (curr: TestOptions) => any;
+    child_configure: (curr: TestOptions) => any;
   }
 >;
 
@@ -104,18 +101,16 @@ function mock_nested_suite_collectors(this: Context) {
 }
 
 function configure_timeout(this: Context) {
-  this.configure = function (this: TestOptionsContext) {
-    this.testOptions.timeout = 100_000;
-  };
+  this.configure = (curr) => curr.timeout = 100_000;
 }
 
 function configure_parent_and_child(this: Context) {
-  this.parent_configure = function (this: TestOptionsContext) {
-    this.testOptions.timeout = 10_000;
-    this.testOptions.retry = 1;
+  this.parent_configure = (curr) => {
+    curr.timeout = 10_000;
+    curr.retry = 1;
   };
-  this.child_configure = function (this: TestOptionsContext) {
-    this.testOptions.timeout = 50_000;
+  this.child_configure = (curr) => {
+    curr.timeout = 50_000;
   };
 }
 
