@@ -26,6 +26,9 @@
     "src",
     "!**/*.spec.ts"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "main": "./lib/index.cjs",
   "module": "./lib/index.mjs",
@@ -58,13 +61,14 @@
     "@vitest/coverage-v8": "^4.1.9",
     "axios": "^1.18.0",
     "typescript": "^6.0.3",
+    "vite-plus": "^0.2.9",
     "vitest": "^4.1.9",
     "wireit": "^0.14.12"
   },
   "peerDependencies": {
     "vitest": ">=4.0.0"
   },
-  "packageManager": "npm@11.12.1",
+  "packageManager": "pnpm@11.22.0",
   "wireit": {
     "build": {
       "command": "vp pack",

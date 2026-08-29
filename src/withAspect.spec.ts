@@ -2,7 +2,7 @@ import { TestContext } from "gwt-runner";
 import { vi, describe, expect } from "vitest";
 
 import test from "./index";
-import withAspectBuilder from "./withAspect";
+import withAspectBuilder, { type AspectFunction } from "./withAspect";
 
 describe("withAspect", () => {
   test("creates context BEFORE the before each", {
@@ -48,6 +48,34 @@ describe("withAspect", () => {
       context_is_released,
     },
   });
+
+  test("passes timeout to beforeEach when set", {
+    given: {
+      mock_vitest_functions,
+      mock_context_provider,
+      before_each_with_timeout,
+    },
+    when: {
+      using_aspect,
+    },
+    then: {
+      before_each_received_timeout,
+    },
+  });
+
+  test("omits timeout when unset", {
+    given: {
+      mock_vitest_functions,
+      mock_context_provider,
+      before_each,
+    },
+    when: {
+      using_aspect,
+    },
+    then: {
+      before_each_received_no_timeout,
+    },
+  });
 });
 
 type MockContext = Partial<{
@@ -61,7 +89,7 @@ type Context = Partial<{
     beforeEach: (...args: any[]) => any;
     afterEach: (...args: any[]) => any;
   };
-  before_each: (this: MockContext) => void;
+  before_each: AspectFunction<MockContext>;
   after_each: (this: MockContext) => void;
 }>;
 
@@ -92,8 +120,16 @@ function before_each(this: Context) {
   };
 }
 
+function before_each_with_timeout(this: Context) {
+  const setup: AspectFunction<MockContext> = function (this: MockContext) {
+    this.before_each = this.context_value;
+  };
+  setup.timeout = 100_000;
+  this.before_each = setup;
+}
+
 function after_each(this: Context) {
-  this.before_each = function (this: MockContext) {
+  this.after_each = function (this: MockContext) {
     this.before_each = null;
   };
 }
@@ -101,7 +137,7 @@ function after_each(this: Context) {
 function using_aspect(this: Context) {
   withAspectBuilder(this.vitest!.beforeEach, this.vitest!.afterEach)(
     this.before_each!,
-    this.after_each!,
+    this.after_each,
   );
 }
 
@@ -115,4 +151,18 @@ function context_released_after_cleanup(this: Context) {
 
 function context_is_released(this: Context) {
   expect(TestContext.releaseContext).toHaveBeenCalled();
+}
+
+function before_each_received_timeout(this: Context) {
+  expect(this.vitest!.beforeEach).toHaveBeenCalledWith(
+    expect.any(Function),
+    100_000,
+  );
+}
+
+function before_each_received_no_timeout(this: Context) {
+  expect(this.vitest!.beforeEach).toHaveBeenCalledWith(
+    expect.any(Function),
+    undefined,
+  );
 }

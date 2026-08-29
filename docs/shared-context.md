@@ -29,6 +29,24 @@ withAspect(
   (those belong to the test run, which has already completed by teardown).
 - After `afterEach`, the Context is released.
 
+## Hook timeout
+
+If setup takes longer than Vitest's default hook timeout, set `timeout` on the
+before callback. Type it as `AspectFunction` so you can assign `timeout`
+without casts:
+
+```ts
+import { withAspect, type AspectFunction } from "vitest-gwt";
+
+const setup: AspectFunction<Context> = function () {
+  // slow prep
+};
+setup.timeout = 100_000;
+withAspect(setup);
+```
+
+That value is passed through to Vitest's `beforeEach` as its timeout argument.
+
 ## Example
 
 ```js
